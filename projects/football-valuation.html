@@ -349,13 +349,14 @@
   <section class="project-hero">
     <div class="wrap">
       <a class="back-link reveal" href="../index.html#projects">← Back to projects</a>
-      <span class="eyebrow reveal">SPORTS ANALYTICS · MACHINE LEARNING · STREAMLIT</span>
+      <span class="eyebrow reveal">SPORTS ANALYTICS · MACHINE LEARNING · MARKET SEGMENTATION</span>
       <h1 class="reveal">Football Transfer Valuation Model</h1>
-      <p class="tagline reveal">An XGBoost regression model that prices football transfers on performance data instead of market hype — shipped as a live app sports directors can actually use.</p>
+      <p class="tagline reveal">A market-segmented valuation engine built on 300,000+ historical player valuations — not one model pricing every player the same way, but a specialized pricing logic per market tier, with SHAP explainability behind every number.</p>
       <div class="stat-pills reveal">
-        <span class="stat-pill">XGBoost regression</span>
-        <span class="stat-pill">Transfermarkt data</span>
-        <span class="stat-pill">Live Streamlit app</span>
+        <span class="stat-pill">300k+ valuation records</span>
+        <span class="stat-pill">4 market tiers (K-Means)</span>
+        <span class="stat-pill">4 models compared per tier</span>
+        <span class="stat-pill">SHAP explainability</span>
       </div>
       <div class="detail-cta-row reveal">
         <a class="btn btn-primary" href="https://github.com/GuiAlmeida94/Football-market-analysis" target="_blank" rel="noopener">View code on GitHub</a>
@@ -368,7 +369,7 @@
     <div class="wrap">
       <span class="eyebrow reveal">The Challenge</span>
       <div class="reveal">
-        <p class="lead">In modern football, overpaying in the transfer market can derail a club's financial stability — and too many valuation decisions still lean on reputation and hype rather than performance data. The goal was a tool that gives sports directors an objective, data-driven anchor point for negotiations.</p>
+        <p class="lead">Overpaying in the transfer market can derail a club's finances, and too many valuation calls still lean on reputation over data. But the deeper problem with a naive approach is subtler: training one regression model across every player type forces it to average away the very differences that actually explain price — a bench player and a global superstar don't follow the same pricing logic, so a single model can't price either one well.</p>
       </div>
     </div>
   </section>
@@ -376,19 +377,43 @@
   <section class="detail-section" style="background:var(--bg-alt);">
     <div class="wrap">
       <span class="eyebrow reveal">The Process</span>
-      <h2 class="reveal">From raw performance data to a live pricing tool</h2>
+      <h2 class="reveal">From a raw Kaggle dump to a segmented pricing engine</h2>
       <div class="process-list reveal">
         <div class="process-step">
-          <h3>Sourcing and processing the data</h3>
-          <p>Extracted and processed complex player performance datasets from Transfermarkt as the foundation for the valuation model.</p>
+          <h3>Building the data foundation in SQL</h3>
+          <p>Ingested the full Transfermarkt dataset — players, valuations, clubs, transfers, appearances, game events, lineups — into PostgreSQL and modeled it into a set of standardized views, culminating in a master view joining performance (goals, assists, minutes, captaincy) with financial history across 300,000+ player-season records.</p>
         </div>
         <div class="process-step">
-          <h3>Engineering an XGBoost regression model</h3>
-          <p>Trained a regression model on advanced performance metrics, using feature importance analysis to isolate the variables that genuinely drive market value — stripping away the speculative hype that inflates transfer fees.</p>
+          <h3>Deciding what history actually matters</h3>
+          <p>The obvious move was to use the full 2008–2026 window, but earlier years were shaped by forces that have nothing to do with a player's performance: Brazil's Lei Pelé and Europe's Bosman ruling reshaped transfer economics, the 2017 Neymar-to-PSG transfer (€222M) reset what an "elite" fee looks like, and the 2019–2021 pandemic triggered a price boom followed by a sharp crash. Rather than ask a model to learn through all of that noise, the dataset was narrowed to 2021 onward.</p>
         </div>
         <div class="process-step">
-          <h3>Deploying it as a usable tool</h3>
-          <p>Bridged the gap between data science and end users by shipping the model as an interactive Streamlit app, so a sports director can input a player's stats and get a real-time, objective valuation instead of relying on gut feeling.</p>
+          <h3>Turning a snapshot into a timeline</h3>
+          <p>The raw data treated each valuation as an isolated fact. Rebuilding it around <code>age_at_valuation</code> — a player's exact age at the moment of each specific valuation, not just their current age — turned it into a proper panel: a player like Vinícius Júnior or Erling Haaland shows up multiple times, once per valuation snapshot, tracking how their price moved as their career did. Filtering out under-18s also removed thousands of youth-academy rows with no real market value.</p>
+        </div>
+        <div class="process-step">
+          <h3>Cutting geopolitical noise</h3>
+          <p>The Russian league lost real market relevance after the war in Ukraine, so it was excluded rather than left in as stale signal. The dataset was also narrowed to the leagues that actually move the market: Europe's "Big Five" plus high-liquidity leagues like Portugal, Belgium, the Netherlands, Brazil, Mexico, MLS and Saudi Arabia.</p>
+        </div>
+        <div class="process-step">
+          <h3>Segmenting the market instead of flattening it</h3>
+          <p>K-Means clustering, tuned with the elbow method, split players into distinct market tiers by performance and league weight — so each tier could get its own specialized pricing logic instead of one compromise model trying to fit everyone.</p>
+        </div>
+        <div class="process-step">
+          <h3>Letting four models compete per tier</h3>
+          <p>XGBoost, Random Forest, Ridge Regression and k-NN were each trained and evaluated per cluster. The most interesting result wasn't which algorithm "won" overall — Ridge, the simplest of the four, matched or beat the tree-based models in most tiers. Once the market segmentation was doing the heavy lifting, adding model complexity didn't buy much more.</p>
+        </div>
+        <div class="process-step">
+          <h3>Refining the clusters themselves</h3>
+          <p>The largest tier — the "mass market," roughly 80% of all players — stayed stubbornly hard to predict even after tuning. Isolation Forest separated a genuinely noisy sub-segment from the predictable majority, and two smaller, similar tiers were merged for more stable training data. GridSearchCV then tuned each tier's hyperparameters individually rather than applying one global configuration everywhere.</p>
+        </div>
+        <div class="process-step">
+          <h3>Making the model explainable</h3>
+          <p>SHAP (Shapley Additive exPlanations) breaks down individual predictions into an itemized, euro-denominated "receipt" — showing exactly how much age, league weight, or goal output added or subtracted from a specific player's price, and which features actually drive value within each market tier.</p>
+        </div>
+        <div class="process-step">
+          <h3>Turning it into a decision tool</h3>
+          <p>The project closes with an interactive arbitrage simulator: adjust a player's technical profile and league tier, and it instantly projects the valuation gap between their current market and a higher one — the kind of what-if a sporting director would actually ask before making an offer.</p>
         </div>
       </div>
     </div>
@@ -396,9 +421,22 @@
 
   <section class="detail-section">
     <div class="wrap">
+      <span class="eyebrow reveal">Key Findings</span>
+      <h2 class="reveal">What the segmented approach exposed</h2>
+      <ul class="findings-list reveal">
+        <li><strong>Simpler beat sophisticated.</strong> Ridge Regression matched or outperformed XGBoost and Random Forest in most market tiers — once the market was properly segmented, extra model complexity added little.</li>
+        <li><strong>The mass market has a ceiling.</strong> The tier covering ~80% of all players plateaued around R² 0.44 even after cleaning and tuning — an honest limit that says as much about how unpredictable average-player pricing is as it does about the model.</li>
+        <li><strong>Geography and age outweigh most stats.</strong> <code>league_weight</code> and <code>age_at_valuation</code> were consistently the two strongest price drivers across every tier, in both feature-importance and SHAP analysis.</li>
+        <li><strong>Isolating noise stabilized the top tier.</strong> Using Isolation Forest to separate a noisy sub-segment rather than forcing one model to fit everyone took that tier from unreliable to a consistent R² above 0.60.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="detail-section" style="background:var(--bg-alt);">
+    <div class="wrap">
       <span class="eyebrow reveal">Impact</span>
       <div class="impact-box reveal">
-        <p>This valuation framework gives sports management a data-backed anchor for transfer negotiations — moving decisions from intuition to strategy, and helping clubs mitigate financial risk and maximize ROI during transfer windows.</p>
+        <p>Instead of one black-box number, this gives clubs and scouts a segmented, explainable pricing engine that's honest about where its confidence is high — proven veterans and superstars — and where the market itself is inherently noisier. This project is still evolving: the next iteration will move from pooling 2021–2026 valuations together to comparing prices strictly year over year, so the model reflects how the market actually moves over time rather than treating five years of data as one snapshot.</p>
       </div>
     </div>
   </section>
