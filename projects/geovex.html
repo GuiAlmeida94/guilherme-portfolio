@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geopolitical Events &amp; Commodity Trends Analytics — Guilherme Oyakawa</title>
-<meta name="description" content="An automated Google BigQuery pipeline testing the relationship between geopolitical events and commodity prices — oil and gold.">
+<meta name="description" content="An in-progress project with an Imperial College London collaborator, using explainable AI on global news data to build a systematic commodity pricing signal for investors.">
 <link rel="canonical" href="https://www.guilhermeoyakawa.com.br/projects/geovex.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -358,13 +358,13 @@
   <section class="project-hero">
     <div class="wrap">
       <a class="back-link reveal" href="../index.html#projects">← Back to projects</a>
-      <span class="eyebrow reveal">DATA ENGINEERING · GOOGLE BIGQUERY · MARKET ANALYTICS</span>
+      <span class="eyebrow reveal">NEWS ANALYTICS · EXPLAINABLE AI · COMMODITY MARKETS</span>
       <h1 class="reveal">Geopolitical Events &amp; Commodity Trends Analytics</h1>
-      <p class="tagline reveal">An automated BigQuery pipeline built to test whether global news events actually move oil and gold prices in a reproducible way — cloud data engineering in service of a market-timing question, done for Geovex.</p>
+      <p class="tagline reveal">An in-progress collaboration with a fellow data scientist from Imperial College London: turning global news signals into a systematic, explainable pricing model for commodities — built for an investment audience that can't manually track hundreds of sources.</p>
       <div class="stat-pills reveal">
         <span class="stat-pill">Google BigQuery</span>
-        <span class="stat-pill">SQL + Python</span>
-        <span class="stat-pill">Oil &amp; gold price signals</span>
+        <span class="stat-pill">Multi-layer explainable AI</span>
+        <span class="stat-pill">Gold · Oil · Silver · Copper</span>
       </div>
     </div>
   </section>
@@ -373,7 +373,7 @@
     <div class="wrap">
       <span class="eyebrow reveal">The Challenge</span>
       <div class="reveal">
-        <p class="lead">Commodity markets visibly react to geopolitical headlines, but "reacting" isn't the same as a provable, repeatable pattern. The question wasn't whether news and prices are connected — everyone assumes that — it was whether a structured pipeline could actually test that relationship instead of just asserting it.</p>
+        <p class="lead">Institutional investors tracking commodities face an impossible manual task: gold, oil, silver and industrial metals are each sensitive to news from a sprawling, overlapping set of countries — not just where the commodity physically sits, but wherever the companies that extract it operate. Reading every relevant outlet by hand doesn't scale. The goal is a systematic pipeline that watches the right sources for the right countries and turns that into a transparent pricing signal.</p>
       </div>
     </div>
   </section>
@@ -381,19 +381,27 @@
   <section class="detail-section" style="background:var(--bg-alt);">
     <div class="wrap">
       <span class="eyebrow reveal">The Process</span>
-      <h2 class="reveal">Turning a hunch into a reproducible pipeline</h2>
+      <h2 class="reveal">Mapping exposure before mapping data</h2>
       <div class="process-list reveal">
         <div class="process-step">
-          <h3>Building an automated ingestion pipeline</h3>
-          <p>Designed a Google BigQuery pipeline to ingest, filter and prepare large-scale global news datasets for market analysis — treating cloud data warehousing as the foundation of the project rather than an afterthought bolted onto a spreadsheet.</p>
+          <h3>Mapping exposure, not just geography</h3>
+          <p>For each commodity, the first step isn't picking a country — it's mapping true market exposure. Gold prices don't just move on news from the top reserve-holding nations; they move on news touching wherever the major mining companies actually operate. Australia, for example, hosts some of the world's largest gold-mining companies despite modest domestic reserves — so news about Australian miners' operations in Brazil or across Africa matters as much as news from the country holding the gold itself. That exposure map, built commodity by commodity, is the foundation everything else sits on.</p>
         </div>
         <div class="process-step">
-          <h3>Structuring the analysis in SQL and Python</h3>
-          <p>Developed SQL and Python workflows to evaluate relationships between geopolitical events and commodity-price fluctuations, focusing on oil and gold as the two markets most sensitive to headline risk.</p>
+          <h3>Ingesting global news at scale</h3>
+          <p>Built a pipeline on a free, publicly queryable global news-event dataset accessed through Google BigQuery, filtering by country, source and topic to isolate the coverage relevant to each commodity's exposure map.</p>
         </div>
         <div class="process-step">
-          <h3>Prioritizing reproducibility over a single chart</h3>
-          <p>Structured the data-processing and predictive-analysis workflows so the same pipeline could be re-run against new events or new commodities, rather than producing a one-off correlation that couldn't be extended.</p>
+          <h3>Layering explainability into the model</h3>
+          <p>Rather than a single black-box score, the model is being built in layers, each one documenting what it does and why — surfacing which specific news events, companies and countries are driving a given signal, so an analyst can trace a prediction back to its source instead of just trusting a number.</p>
+        </div>
+        <div class="process-step">
+          <h3>Designing for a real commercial audience</h3>
+          <p>The project is aimed squarely at investment professionals who need an always-on alternative to manually monitoring dozens of news sites for early signals on gold, oil, silver, copper and other commodities.</p>
+        </div>
+        <div class="process-step">
+          <h3>Planning a multi-source roadmap</h3>
+          <p>The current pipeline runs on a single free data source to prove the concept; the roadmap includes layering in additional licensed news APIs from major international outlets as the project secures funding, widening the signal beyond what one free dataset can offer.</p>
         </div>
       </div>
     </div>
@@ -401,9 +409,9 @@
 
   <section class="detail-section">
     <div class="wrap">
-      <span class="eyebrow reveal">Impact</span>
+      <span class="eyebrow reveal">Where It's Headed</span>
       <div class="impact-box reveal">
-        <p>Combining cloud-scale data engineering with a tightly scoped analytical question turned an ambiguous "does news move prices" hunch into a reproducible, extensible pipeline — a foundation that can be pointed at new events or commodities without rebuilding the ingestion layer from scratch.</p>
+        <p>Still an active build with a data-science partner from Imperial College London, this project aims to give investment teams a systematic, explainable early-read on commodity price moves — the kind of cross-referenced, country-by-country news analysis that's currently too labor-intensive for most trading desks to do by hand. Code and data sources are confidential under an active NDA, so this page describes the approach rather than the implementation.</p>
       </div>
     </div>
   </section>
