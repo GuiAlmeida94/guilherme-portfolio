@@ -224,7 +224,7 @@
   }
 
   /* -------- Skills -------- */
-  .skills-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:20px;}
   .skill-card{
     background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px;
     transition:border-color .2s, transform .2s;
@@ -453,28 +453,37 @@
         <div class="skill-card">
           <h3>Programming &amp; Data</h3>
           <ul>
-            <li>Python (Pandas, NumPy, Scikit-learn)</li>
-            <li>SQL (PostgreSQL, MySQL)</li>
+            <li>Python (Pandas, NumPy, Scikit-learn, XGBoost)</li>
+            <li>SQL (PostgreSQL — views, CTEs, window functions)</li>
             <li>Scala</li>
-            <li>ETL &amp; data cleansing</li>
+            <li>ETL &amp; data pipeline design</li>
           </ul>
         </div>
         <div class="skill-card">
           <h3>BI &amp; Visualization</h3>
           <ul>
-            <li>Power BI (DAX, Power Query)</li>
+            <li>Power BI (DAX, Power Query, star-schema modeling)</li>
             <li>Tableau</li>
-            <li>Dashboard storytelling</li>
+            <li>Matplotlib / Seaborn</li>
             <li>Excel (Advanced / VBA)</li>
           </ul>
         </div>
         <div class="skill-card">
-          <h3>Advanced Analytics</h3>
+          <h3>Machine Learning &amp; Explainability</h3>
           <ul>
-            <li>Predictive modeling (XGBoost, k-NN)</li>
-            <li>Regression &amp; classification</li>
-            <li>Exploratory data analysis</li>
-            <li>Data Lake / Warehouse concepts</li>
+            <li>Predictive modeling (XGBoost, Random Forest, Ridge, k-NN)</li>
+            <li>Clustering (K-Means, Isolation Forest)</li>
+            <li>SHAP (explainable AI)</li>
+            <li>Hyperparameter tuning (GridSearchCV)</li>
+          </ul>
+        </div>
+        <div class="skill-card">
+          <h3>Domain Expertise</h3>
+          <ul>
+            <li>Financial risk &amp; FP&amp;A</li>
+            <li>Supply chain analytics</li>
+            <li>Customer retention &amp; CRM</li>
+            <li>Sports market valuation</li>
           </ul>
         </div>
         <div class="skill-card">
@@ -482,8 +491,8 @@
           <ul>
             <li>Git / GitHub</li>
             <li>Jupyter Notebooks</li>
-            <li>Salesforce CRM</li>
-            <li>Cloud fundamentals (AWS, Azure, GCP)</li>
+            <li>Streamlit (app deployment)</li>
+            <li>Salesforce CRM · Cloud fundamentals (AWS, Azure, GCP)</li>
           </ul>
         </div>
       </div>
@@ -596,6 +605,7 @@
         <p>Open to Data Analyst / Business Analyst roles across the EU — remote or Dublin-based. Reachable any time below.</p>
         <div class="contact-links">
           <a class="btn btn-primary" href="mailto:guilherme_oyakawa_almeida@hotmail.com">Email me</a>
+          <a class="btn btn-ghost" href="https://wa.me/353830681204" target="_blank" rel="noopener">WhatsApp</a>
           <a class="btn btn-ghost" href="https://www.linkedin.com/in/guilherme-oyakawa-almeida/" target="_blank" rel="noopener">LinkedIn</a>
           <a class="btn btn-ghost" href="https://github.com/GuiAlmeida94" target="_blank" rel="noopener">GitHub</a>
           <a class="btn btn-ghost" href="https://medium.com/@guilhermeoyakawalmeida" target="_blank" rel="noopener">Medium</a>
