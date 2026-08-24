@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Decoding an E-Commerce Delivery Crisis — Guilherme Oyakawa</title>
-<meta name="description" content="Five ML models hit the same accuracy ceiling — and that ceiling turned out to be the real diagnosis behind a logistics operation's chronic delays.">
-<link rel="canonical" href="https://www.guilhermeoyakawa.com.br/projects/supply-chain.html">
+<title>Geopolitical Events &amp; Commodity Trends Analytics — Guilherme Oyakawa</title>
+<meta name="description" content="An automated Google BigQuery pipeline testing the relationship between geopolitical events and commodity prices — oil and gold.">
+<link rel="canonical" href="https://www.guilhermeoyakawa.com.br/projects/geovex.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -358,18 +358,13 @@
   <section class="project-hero">
     <div class="wrap">
       <a class="back-link reveal" href="../index.html#projects">← Back to projects</a>
-      <span class="eyebrow reveal">LOGISTICS · MACHINE LEARNING · POWER BI</span>
-      <h1 class="reveal">Decoding an E-Commerce Delivery Crisis</h1>
-      <p class="tagline reveal">An international e-commerce company had nearly 60% of shipments arriving late. Five machine learning models later, the real finding wasn't a prediction — it was a diagnosis.</p>
+      <span class="eyebrow reveal">DATA ENGINEERING · GOOGLE BIGQUERY · MARKET ANALYTICS</span>
+      <h1 class="reveal">Geopolitical Events &amp; Commodity Trends Analytics</h1>
+      <p class="tagline reveal">An automated BigQuery pipeline built to test whether global news events actually move oil and gold prices in a reproducible way — cloud data engineering in service of a market-timing question, done for Geovex.</p>
       <div class="stat-pills reveal">
-        <span class="stat-pill">~60% of shipments delayed</span>
-        <span class="stat-pill">5 ML models tested</span>
-        <span class="stat-pill">67% accuracy ceiling</span>
-      </div>
-      <div class="detail-cta-row reveal">
-        <a class="btn btn-primary" href="https://github.com/GuiAlmeida94/ecommerce-logistics-prediction" target="_blank" rel="noopener">View code on GitHub</a>
-        <a class="btn btn-ghost" href="https://app.powerbi.com/view?r=eyJrIjoiYTkwNjc0MGYtMGU5Yy00MWRmLTliOGYtMTE3Yjg3NDMzMzJjIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open live dashboard</a>
-        <a class="btn btn-ghost" href="https://medium.com/@guilhermeoyakawalmeida/the-vip-paradox-decoding-supply-chain-chaos-with-python-and-power-bi-81739be2a13c" target="_blank" rel="noopener">Read the full write-up</a>
+        <span class="stat-pill">Google BigQuery</span>
+        <span class="stat-pill">SQL + Python</span>
+        <span class="stat-pill">Oil &amp; gold price signals</span>
       </div>
     </div>
   </section>
@@ -378,42 +373,27 @@
     <div class="wrap">
       <span class="eyebrow reveal">The Challenge</span>
       <div class="reveal">
-        <p class="lead">In a market shaped by next-day delivery expectations, logistics is customer retention. The brief was simple on paper: build a model to predict which packages would be delayed so the supply chain team could act proactively. What the data revealed was a far more complex picture.</p>
+        <p class="lead">Commodity markets visibly react to geopolitical headlines, but "reacting" isn't the same as a provable, repeatable pattern. The question wasn't whether news and prices are connected — everyone assumes that — it was whether a structured pipeline could actually test that relationship instead of just asserting it.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="detail-section">
-    <div class="wrap">
-      <span class="eyebrow reveal">Live Dashboard</span>
-      <h2 class="reveal">Explore the Power BI dashboard</h2>
-      <div class="dashboard-embed reveal" style="aspect-ratio: 1200 / 600;">
-        <iframe title="Ecommerce_Analysis" src="https://app.powerbi.com/view?r=eyJrIjoiYTkwNjc0MGYtMGU5Yy00MWRmLTliOGYtMTE3Yjg3NDMzMzJjIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" frameborder="0" allowfullscreen loading="lazy"></iframe>
-      </div>
-      <p class="dashboard-caption reveal">Having trouble viewing it? <a href="https://app.powerbi.com/view?r=eyJrIjoiYTkwNjc0MGYtMGU5Yy00MWRmLTliOGYtMTE3Yjg3NDMzMzJjIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the dashboard directly</a>.</p>
     </div>
   </section>
 
   <section class="detail-section" style="background:var(--bg-alt);">
     <div class="wrap">
       <span class="eyebrow reveal">The Process</span>
-      <h2 class="reveal">When the model's failure became the finding</h2>
+      <h2 class="reveal">Turning a hunch into a reproducible pipeline</h2>
       <div class="process-list reveal">
         <div class="process-step">
-          <h3>Feature engineering</h3>
-          <p>Cleaned shipment data covering mode of shipment (flight, ship, road), warehouse block, product weight, and customer importance rating; one-hot encoded the categoricals and scaled the numeric features.</p>
+          <h3>Building an automated ingestion pipeline</h3>
+          <p>Designed a Google BigQuery pipeline to ingest, filter and prepare large-scale global news datasets for market analysis — treating cloud data warehousing as the foundation of the project rather than an afterthought bolted onto a spreadsheet.</p>
         </div>
         <div class="process-step">
-          <h3>Testing a spectrum of models</h3>
-          <p>Started with baseline distance and linear models — k-NN and SVM — to understand how the data behaved fundamentally, then escalated to the industry-standard ensemble methods: Random Forest, Gradient Boosting, and XGBoost.</p>
+          <h3>Structuring the analysis in SQL and Python</h3>
+          <p>Developed SQL and Python workflows to evaluate relationships between geopolitical events and commodity-price fluctuations, focusing on oil and gold as the two markets most sensitive to headline risk.</p>
         </div>
         <div class="process-step">
-          <h3>Hitting a hard ceiling</h3>
-          <p>Every model, from the simplest to the most sophisticated, plateaued around 63–67% accuracy. Testing five genuinely different mathematical approaches and landing on the same wall is itself a signal: the delays weren't following a learnable pattern from the available variables — the operation was in a state of chronic, structural chaos, not a chaos a smarter algorithm could untangle.</p>
-        </div>
-        <div class="process-step">
-          <h3>Mapping the chaos in Power BI</h3>
-          <p>If the machine can't predict the disorder with confidence, the next move is to map where it's concentrated so the business can act directly on the source.</p>
+          <h3>Prioritizing reproducibility over a single chart</h3>
+          <p>Structured the data-processing and predictive-analysis workflows so the same pipeline could be re-run against new events or new commodities, rather than producing a one-off correlation that couldn't be extended.</p>
         </div>
       </div>
     </div>
@@ -421,28 +401,16 @@
 
   <section class="detail-section">
     <div class="wrap">
-      <span class="eyebrow reveal">Key Findings</span>
-      <h2 class="reveal">The VIP Paradox</h2>
-      <ul class="findings-list reveal">
-        <li><strong>"High importance" shipments were the most delayed.</strong> Nearly 65% late — the deliveries that should get the most care were getting the least reliable treatment.</li>
-        <li><strong>Air freight had the worst delay rate of any shipping mode</strong> — over 60%, despite being the premium, express-cost option.</li>
-        <li><strong>Warehouse Block B was the single biggest bottleneck,</strong> with a delay rate above 60%, closely followed by two other blocks — pointing to a breakdown in internal workflow management at specific hubs.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="detail-section" style="background:var(--bg-alt);">
-    <div class="wrap">
       <span class="eyebrow reveal">Impact</span>
       <div class="impact-box reveal">
-        <p>True analysis doesn't stop at <code>model.fit()</code> — it stops when the business makes a decision. Here, that meant redirecting the company's strategy away from deploying a predictive algorithm and toward an emergency warehouse audit and renegotiated SLAs with air-freight carriers. A 67% accuracy ceiling didn't fail to predict the future; it successfully diagnosed a broken present.</p>
+        <p>Combining cloud-scale data engineering with a tightly scoped analytical question turned an ambiguous "does news move prices" hunch into a reproducible, extensible pipeline — a foundation that can be pointed at new events or commodities without rebuilding the ingestion layer from scratch.</p>
       </div>
     </div>
   </section>
 </main>
 
 <div class="next-project reveal">
-  <a href="ecommerce-churn.html">Next project: Predictive Churn Dashboard →</a>
+  <a href="football-valuation.html">Next project: Football Transfer Valuation Model →</a>
 </div>
 
 <footer>
