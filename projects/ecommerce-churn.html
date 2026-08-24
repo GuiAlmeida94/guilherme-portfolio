@@ -323,6 +323,14 @@
 }
 .impact-box p{color:var(--text-muted); font-size:16px; max-width:70ch;}
 
+  .dashboard-embed{
+    border:1px solid var(--border); border-radius:14px; overflow:hidden;
+    background:var(--surface); margin-top:8px;
+  }
+  .dashboard-embed iframe{width:100%; height:100%; border:0; display:block;}
+  .dashboard-caption{margin-top:10px; font-size:13px; color:var(--text-faint);}
+  .dashboard-caption a{color:var(--accent-2);}
+
 .detail-cta-row{display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;}
 
 .next-project{
@@ -371,6 +379,17 @@
       <div class="reveal">
         <p class="lead">Ora Fashion, an online retail brand, was losing customers and didn't know who was leaving, when the drop-off happened, or how to prevent it — a classic case of rising acquisition costs with no visibility into customer lifetime value. The mission: move the company from retroactive reporting to proactive customer lifecycle management.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="detail-section">
+    <div class="wrap">
+      <span class="eyebrow reveal">Live Dashboard</span>
+      <h2 class="reveal">Explore the Power BI dashboard</h2>
+      <div class="dashboard-embed reveal" style="aspect-ratio: 1200 / 620;">
+        <iframe title="OraPresentation_FinalVersion" src="https://app.powerbi.com/view?r=eyJrIjoiNjMyZWUyOTEtNjlmNS00NjhlLWEwYzAtMzQ2ZmY4ZDJlOTk0IiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" frameborder="0" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <p class="dashboard-caption reveal">Having trouble viewing it? <a href="https://app.powerbi.com/view?r=eyJrIjoiNjMyZWUyOTEtNjlmNS00NjhlLWEwYzAtMzQ2ZmY4ZDJlOTk0IiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the dashboard directly</a>.</p>
     </div>
   </section>
 
