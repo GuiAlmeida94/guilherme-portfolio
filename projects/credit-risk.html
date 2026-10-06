@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Predicting Credit Default — Guilherme Oyakawa</title>
-<meta name="description" content="How a k-NN model and a Power BI risk dashboard helped catch 61% of loan defaulters before the money left the bank.">
+<meta name="description" content="A leakage-free XGBoost credit-default model with calibrated probabilities and SHAP explanations: 86% of defaulters caught and 81% lower simulated loss.">
 <link rel="canonical" href="https://www.guilhermeoyakawa.com.br/projects/credit-risk.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -339,6 +339,15 @@
 .next-project a{
   font-family:var(--font-mono); font-size:13px; color:var(--accent-2);
 }
+.chart-figure{margin-top:28px;}
+.chart-figure img{width:100%; height:auto; display:block; background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px;}
+.chart-figure figcaption{margin-top:10px; font-size:13px; color:var(--text-faint);}
+.table-wrap{overflow-x:auto; margin-top:8px;}
+.results-table{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:14px;}
+.results-table th,.results-table td{padding:12px 16px; text-align:left; border-bottom:1px solid var(--border);}
+.results-table th{color:var(--text-faint); font-weight:500; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;}
+.results-table td{color:var(--text-muted);}
+.results-table tr.best td{color:var(--accent); font-weight:600;}
 </style>
 </head>
 <body>
@@ -357,20 +366,19 @@
 <main>
   <section class="project-hero">
     <div class="wrap">
-      <a class="back-link reveal" href="../index.html#projects">← Back to projects</a>
-      <span class="eyebrow reveal">FINANCE · MACHINE LEARNING · POWER BI</span>
+      <a class="back-link reveal" href="../index.html#projects">&larr; Back to projects</a>
+      <span class="eyebrow reveal">FINANCE &middot; MACHINE LEARNING &middot; XGBOOST &middot; SHAP</span>
       <h1 class="reveal">Predicting Credit Default</h1>
-      <p class="tagline reveal">A k-NN classifier that catches 6 out of 10 defaulters before the money leaves the bank — paired with a Power BI dashboard that shows loan officers exactly where the risk is concentrated.</p>
+      <p class="tagline reveal">A leakage-free machine-learning pipeline that estimates every applicant's probability of default and turns it into approve / review / reject decisions &mdash; catching 86% of defaulters and cutting simulated losses by 81%.</p>
       <div class="stat-pills reveal">
-        <span class="stat-pill">30,000+ applicants</span>
-        <span class="stat-pill">21.5% baseline default rate</span>
-        <span class="stat-pill">61% recall</span>
-        <span class="stat-pill">89% accuracy</span>
+        <span class="stat-pill">32,409 loans analysed</span>
+        <span class="stat-pill">ROC-AUC 0.950</span>
+        <span class="stat-pill">86% of defaulters caught</span>
+        <span class="stat-pill">81% lower simulated loss</span>
       </div>
       <div class="detail-cta-row reveal">
         <a class="btn btn-primary" href="https://github.com/GuiAlmeida94/credit-risk-analysis-python" target="_blank" rel="noopener">View code on GitHub</a>
-        <a class="btn btn-ghost" href="https://app.powerbi.com/view?r=eyJrIjoiNzMyY2ZmYWItYWVjMy00ZDdmLWJiMjQtOTg4YjMxMDBiMjkwIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open live dashboard</a>
-        <a class="btn btn-ghost" href="https://medium.com/@guilhermeoyakawalmeida/dpredicting-credit-default-how-a-61-recall-rate-can-save-millions-for-a-bank-0ae917c7c581" target="_blank" rel="noopener">Read the full write-up</a>
+        <a class="btn btn-ghost" href="#dashboard">See the Power BI dashboard</a>
       </div>
     </div>
   </section>
@@ -379,46 +387,44 @@
     <div class="wrap">
       <span class="eyebrow reveal">The Challenge</span>
       <div class="reveal">
-        <p class="lead">Lending money is inherently risky — lending blindly is what destroys margins. The portfolio I analyzed had a default rate of 21.5%: for every five loans approved, more than one resulted in a loss. The goal was to build both a predictive gatekeeper and a visual risk map loan officers could actually use day to day.</p>
+        <p class="lead">A lender loses money in two ways: approving a client who later defaults, and rejecting a good client who would have paid. In this portfolio (32,581 loans from the public Kaggle Credit Risk dataset, 32,409 after cleaning) about 22% of loans defaulted. The goal was to estimate each applicant's <strong>probability of default</strong> so a credit team can approve, review or reject based on risk &mdash; and to measure what that is actually worth in money, not just in accuracy points.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="detail-section">
-    <div class="wrap">
-      <span class="eyebrow reveal">Live Dashboard</span>
-      <h2 class="reveal">Explore the Power BI dashboard</h2>
-      <div class="dashboard-embed reveal" style="aspect-ratio: 1200 / 600;">
-        <iframe title="Credit_risk_analysis" src="https://app.powerbi.com/view?r=eyJrIjoiNzMyY2ZmYWItYWVjMy00ZDdmLWJiMjQtOTg4YjMxMDBiMjkwIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" frameborder="0" allowfullscreen loading="lazy"></iframe>
-      </div>
-      <p class="dashboard-caption reveal">Having trouble viewing it? <a href="https://app.powerbi.com/view?r=eyJrIjoiNzMyY2ZmYWItYWVjMy00ZDdmLWJiMjQtOTg4YjMxMDBiMjkwIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the dashboard directly</a>.</p>
     </div>
   </section>
 
   <section class="detail-section" style="background:var(--bg-alt);">
     <div class="wrap">
       <span class="eyebrow reveal">The Process</span>
-      <h2 class="reveal">From raw applications to a risk-ready model</h2>
+      <h2 class="reveal">From a k-NN baseline to a calibrated risk engine</h2>
+      <p class="lead reveal">The project has two versions. The original compared k-NN and SVM and reached 61% recall. Version 2 rebuilds the work from the ground up and is the one summarised below; the original is kept in the repository unchanged.</p>
       <div class="process-list reveal">
         <div class="process-step">
-          <h3>Data profiling &amp; business framing</h3>
-          <p>Loaded 30,000+ loan applicant records — age, income, home ownership, loan intent, loan grade. Before touching any algorithm, I isolated high-risk renters with a history of default and found that medical expenses and debt consolidation were the biggest drivers of losses in that segment.</p>
+          <h3>Cleaning &amp; framing the problem</h3>
+          <p>Removed impossible records (ages above 100, employment histories longer than a working life) and framed the goal around recall on defaulters rather than accuracy: a model that approves everyone is still roughly 78% accurate while the bank loses money on the other 22%.</p>
         </div>
         <div class="process-step">
-          <h3>Cleaning &amp; exploratory analysis</h3>
-          <p>Filled missing interest-rate values (about 10% of rows) with the median, stripped out impossible outliers like ages over 100 and employment lengths over 60 years, then ran a correlation matrix to scout early relationships with default status.</p>
+          <h3>Leakage-free pipelines</h3>
+          <p>In the original version, imputation and encoding ran on the full dataset before the train/test split. In v2 every preprocessing step &mdash; imputation, scaling, encoding &mdash; sits inside a pipeline and is fitted on training data only, so the test results are an honest estimate of performance on new applicants.</p>
         </div>
         <div class="process-step">
-          <h3>Feature engineering</h3>
-          <p>One-hot encoded the categorical fields, split the data 70/30 for training and testing, and scaled the numeric features — without that step, an income in the hundreds of thousands would have completely drowned out a variable like interest rate.</p>
+          <h3>Model comparison with cross-validation</h3>
+          <p>Compared k-NN, Logistic Regression, Random Forest and XGBoost using stratified 5-fold cross-validation, then tuned the two strongest tree models. Results are reported on a 30% hold-out test set that was never used for tuning.</p>
         </div>
         <div class="process-step">
-          <h3>Choosing the right metric — and the right model</h3>
-          <p>Accuracy is a trap here: a model that approves everyone still looks roughly 80% accurate while the bank quietly bleeds money on the 20% who default. Recall on defaulters was the metric that actually mattered. A scatterplot of income against interest rate showed no clean line between good and bad loans, which ruled out a simple linear approach — so I tested a linear SVM against a distance-based k-NN model.</p>
+          <h3>Choosing the decision threshold</h3>
+          <p>A 0.5 cutoff is rarely right for a lender. The threshold was chosen on out-of-fold training predictions, favouring recall (F2), and the final numbers carry 95% bootstrap confidence intervals so the uncertainty is visible.</p>
         </div>
         <div class="process-step">
-          <h3>Translating the model into decisions</h3>
-          <p>A model living in a notebook doesn't change anyone's behavior. I moved the results into Power BI so loan officers could see risk visually — by grade, by home-ownership status, by loan purpose — instead of trusting a single score.</p>
+          <h3>Probability calibration</h3>
+          <p>The raw model overstated risk &mdash; a mean predicted default probability of 29.2% against 21.9% observed. Isotonic calibration brought it to 22.1% and cut the Brier score from 0.064 to 0.052 without hurting ranking quality.</p>
+        </div>
+        <div class="process-step">
+          <h3>Explainability &amp; stress tests</h3>
+          <p>SHAP values show what drives each decision. Ablation tests removed the lender's own pricing signals (loan grade and interest rate) and the applicant's age to check that the model is not simply echoing an earlier score or leaning on a sensitive variable.</p>
+        </div>
+        <div class="process-step">
+          <h3>Translating the model into money</h3>
+          <p>Scored all 32,409 clients, split them into Low / Medium / High risk bands, and ran a cost analysis (illustrative 60% loss given default plus one year of forgone interest) comparing the model against approving everyone and against a simple "reject grades D to G" rule.</p>
         </div>
       </div>
     </div>
@@ -426,22 +432,64 @@
 
   <section class="detail-section">
     <div class="wrap">
-      <span class="eyebrow reveal">Key Findings</span>
-      <h2 class="reveal">What the dashboard exposed</h2>
-      <ul class="findings-list reveal">
-        <li><strong>k-NN beat the linear model.</strong> The distance-based k-NN classifier caught 61% of actual defaulters at 89% overall accuracy, comfortably outperforming the linear SVM.</li>
-        <li><strong>"G-grade" loans are a black hole.</strong> This grade carried an almost 98% default rate — not a calculated risk, essentially a guaranteed loss that should be restricted outright.</li>
-        <li><strong>Renters are the highest-risk segment.</strong> A 31% default rate, concentrated in debt-consolidation and medical loans.</li>
-        <li><strong>Homeowners are the safest bet.</strong> Just a 7% default rate, making them prime candidates for premium credit products.</li>
-      </ul>
+      <span class="eyebrow reveal">Model Results</span>
+      <h2 class="reveal">Tree models win because risk lives in combinations</h2>
+      <div class="table-wrap reveal">
+        <table class="results-table">
+          <thead><tr><th>Model</th><th>ROC-AUC</th><th>PR-AUC</th></tr></thead>
+          <tbody>
+            <tr><td>k-NN</td><td>0.865</td><td>0.735</td></tr>
+            <tr><td>Logistic Regression</td><td>0.870</td><td>0.708</td></tr>
+            <tr><td>Random Forest</td><td>0.933</td><td>0.886</td></tr>
+            <tr><td>Random Forest (tuned)</td><td>0.929</td><td>0.878</td></tr>
+            <tr class="best"><td>XGBoost (tuned)</td><td>0.950</td><td>0.907</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="dashboard-caption reveal">Hold-out test set (30% of loans). Linear and distance-based models plateau because default risk depends on combinations of variables &mdash; for example loan grade together with loan-to-income &mdash; which trees capture naturally.</p>
+      <figure class="chart-figure reveal">
+        <img src="img/credit_risk_benchmark.png" alt="Bar chart comparing recall and ROC-AUC for k-NN, Logistic Regression, Random Forest and XGBoost" loading="lazy">
+        <figcaption>Recall (at each model's tuned threshold) and ROC-AUC by model.</figcaption>
+      </figure>
     </div>
   </section>
 
   <section class="detail-section" style="background:var(--bg-alt);">
     <div class="wrap">
-      <span class="eyebrow reveal">Impact</span>
+      <span class="eyebrow reveal">Key Findings</span>
+      <h2 class="reveal">What the model and the data showed</h2>
+      <ul class="findings-list reveal">
+        <li><strong>86% of defaulters caught.</strong> The tuned XGBoost recalls 86.1% of defaulters (95% CI 84.7% to 87.6%) at 66.8% precision. For comparison, the original k-NN caught 61.1% at the default 0.5 cutoff.</li>
+        <li><strong>81% lower simulated loss.</strong> Using the model as a credit filter cuts the simulated loss from USD 13.97M to USD 2.67M versus approving every loan (95% CI 79.1% to 82.6%). The naive "reject grades D to G" rule saves 37.3%. Across a range of cost assumptions the saving stays between 75.5% and 84.3%.</li>
+        <li><strong>Risk bands separate clients cleanly.</strong> Observed default rates are 2.1% for Low risk (17,364 clients), 11.4% for Medium (7,302) and 76.1% for High (7,743). The High band holds about 82% of the expected loss.</li>
+        <li><strong>Loan size relative to income is the sharpest signal.</strong> Loans above 30% of income default 70.4% of the time, against 11.6% below 10%. A prior default on file lifts the rate from 18.4% to 37.9%.</li>
+        <li><strong>The model is more than the lender's own score.</strong> Without loan grade and interest rate, ROC-AUC falls from 0.950 to 0.904 &mdash; part of the signal is earlier pricing, but a substantial independent signal remains. Removing age costs almost nothing (0.948).</li>
+      </ul>
+      <figure class="chart-figure reveal">
+        <img src="img/credit_risk_shap_beeswarm.png" alt="SHAP beeswarm plot showing how each feature pushes the XGBoost default prediction up or down" loading="lazy">
+        <figcaption>SHAP beeswarm: each dot is a client. High loan-to-income and high interest rates push risk up; owning a home and high-quality loan grades push it down.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="detail-section" id="dashboard">
+    <div class="wrap">
+      <span class="eyebrow reveal">Live Dashboard &middot; Original Version</span>
+      <h2 class="reveal">Explore the Power BI dashboard</h2>
+      <p class="lead reveal">The dashboard below was built on the original analysis and is being reworked to include the v2 risk scores.</p>
+      <div class="dashboard-embed reveal" style="aspect-ratio: 1200 / 600; margin-top:20px;">
+        <iframe title="Credit_risk_analysis" src="https://app.powerbi.com/view?r=eyJrIjoiNzMyY2ZmYWItYWVjMy00ZDdmLWJiMjQtOTg4YjMxMDBiMjkwIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" frameborder="0" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <p class="dashboard-caption reveal">Having trouble viewing it? <a href="https://app.powerbi.com/view?r=eyJrIjoiNzMyY2ZmYWItYWVjMy00ZDdmLWJiMjQtOTg4YjMxMDBiMjkwIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the dashboard directly</a>. Original write-up: <a href="https://medium.com/@guilhermeoyakawalmeida/dpredicting-credit-default-how-a-61-recall-rate-can-save-millions-for-a-bank-0ae917c7c581" target="_blank" rel="noopener">Predicting Credit Default (v1)</a>.</p>
+    </div>
+  </section>
+
+  <section class="detail-section" style="background:var(--bg-alt);">
+    <div class="wrap">
+      <span class="eyebrow reveal">Impact &amp; Limitations</span>
       <div class="impact-box reveal">
-        <p>Combining the k-NN model's ability to catch 6 in 10 defaulters with a dashboard that makes risk visible by grade and profile gave the bank a path from reactive debt collection to proactive lending policy — the fix wasn't to stop lending, it was to stop lending blindly.</p>
+        <p>The result is a path from a single yes/no score to a risk-based lending policy: approve the Low band, review the Medium band, and focus scarce attention on the High band where most of the expected loss sits. The fix is not to stop lending &mdash; it is to price and screen risk with evidence.</p>
+        <p style="margin-top:16px; font-size:14px; color:var(--text-faint);">Caveats: cost figures are illustrative US-dollar assumptions (the notebook includes a sensitivity analysis); the data is a snapshot with no time dimension and outcomes only for approved loans; and variables such as age may be restricted in real credit decisions, so a compliance review would be required before any real use.</p>
       </div>
     </div>
   </section>
