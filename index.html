@@ -197,6 +197,14 @@
     transition:all .2s;
   }
   .social-row a:hover{border-color:var(--accent); color:var(--accent); transform:translateY(-2px);}
+  /* -------- Highlights -------- */
+  .highlights-band{padding:48px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--bg-alt);}
+  .highlights-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .hl{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px; display:flex; flex-direction:column; gap:8px;}
+  .hl-num{font-family:var(--font-mono); font-size:28px; font-weight:600; color:var(--accent);}
+  .hl-label{font-size:14px; color:var(--text-muted); line-height:1.5;}
+  @media (max-width:860px){.highlights-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.highlights-grid{grid-template-columns:1fr;}}
 
   /* -------- About -------- */
   .about-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:start;}
@@ -395,10 +403,10 @@
   <!-- HERO -->
   <section class="hero" id="top">
     <div class="wrap hero-inner">
-      <span class="eyebrow">DUBLIN, IRELAND · EU CITIZEN · OPEN TO RELOCATE</span>
+      <span class="eyebrow">DUBLIN, IRELAND &middot; EU CITIZEN &middot; NO VISA SPONSORSHIP NEEDED</span>
       <h1>Guilherme Oyakawa de Almeida</h1>
       <div class="role-line" id="roleLine" aria-hidden="true"></div>
-      <p class="lede">I turn messy datasets into decisions — SQL, Python and Power BI in service of the P&amp;L. Master's in Data Science, background in Business Administration, and a habit of shipping the dashboard that actually gets used.</p>
+      <p class="lede">Data Analyst with an MSc in Data Science and Imperial College training in Data Analytics. I turn operational and technical data into KPI reporting, predictive models and Power BI dashboards that get used &mdash; from BMW prototype quality lines to Samsung logistics to credit-risk models.</p>
       <div class="hero-ctas">
         <a href="#projects" class="btn btn-primary">View Projects</a>
         <a href="files/Guilherme_Oyakawa_CV.pdf" class="btn btn-ghost" target="_blank" rel="noopener">Download CV</a>
@@ -413,6 +421,20 @@
     </div>
   </section>
 
+  <!-- HIGHLIGHTS -->
+  <section id="highlights" class="highlights-band">
+    <div class="wrap">
+      <div class="highlights-grid reveal">
+        <div class="hl"><span class="hl-num">~15%</span><span class="hl-label">less component scrap after spotting a recurring defect (BMW X5/X7 prototype)</span></div>
+        <div class="hl"><span class="hl-num">100%</span><span class="hl-label">on-time delivery across 56&ndash;72 Samsung deliveries a month</span></div>
+        <div class="hl"><span class="hl-num">60,000+</span><span class="hl-label">customer orders analysed for segments, churn risk and revenue</span></div>
+        <div class="hl"><span class="hl-num">120/120</span><span class="hl-label">assessment score for the XGBoost + Streamlit football valuation model</span></div>
+        <div class="hl"><span class="hl-num">3</span><span class="hl-label">quality audits supported, two run directly by BMW</span></div>
+        <div class="hl"><span class="hl-num">4</span><span class="hl-label">languages: Portuguese, English, Italian, Spanish</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ABOUT -->
   <section id="about">
     <div class="wrap">
@@ -422,8 +444,8 @@
       </div>
       <div class="about-grid reveal">
         <div>
-          <p>I'm a Brazilian-Portuguese data professional who spent the last few years turning spreadsheets into strategy — first in automotive quality on BMW supplier lines in Turin, then in independent consulting, and now full-time in data science.</p>
-          <p>After a <strong>Master's in Data Science from Rome Business School</strong> (28/30) and a <strong>Professional Certificate in Data Analytics from Imperial College Business School</strong>, I relocated to Dublin in 2026 — Portuguese citizenship in hand, ready to work across the EU without visa friction.</p>
+          <p>I'm a Brazilian-Portuguese data professional who moves between operations and analytics: logistics and IT service delivery in Brazil, vehicle durability testing for Lamborghini and prototype quality control for BMW in Turin, and now data analysis, predictive modelling and BI.</p>
+          <p>I hold an <strong>MSc in Data Science from Rome Business School</strong> (NFQ Level 9) and completed a <strong>Professional Certificate in Data Analytics from Imperial College Business School</strong> (Oct 2025 &ndash; May 2026). I'm based in Dublin and hold EU citizenship, so I can work across the EU with no visa sponsorship required.</p>
           <p>I like problems with a business owner attached to them: a bank losing money on bad loans, a warehouse missing its SLAs, a condo board flying blind on its budget. Give me the raw data and I'll give you the dashboard that changes the decision.</p>
           <p>Off the clock: a lifelong <strong>Palmeiras</strong> supporter, slowly working through a backlog of sci-fi novels, and prone to disappearing down YouTube rabbit holes about geopolitics.</p>
         </div>
@@ -434,8 +456,8 @@
             <div class="record-row"><span class="record-key">citizenship</span><span class="record-val">🇧🇷 🇵🇹 EU dual national</span></div>
             <div class="record-row"><span class="record-key">education</span><span class="record-val">MSc Data Science</span></div>
             <div class="record-row"><span class="record-key">certification</span><span class="record-val">Data Analytics, Imperial</span></div>
-            <div class="record-row"><span class="record-key">languages</span><span class="record-val">PT · EN · IT · ES · DE</span></div>
-            <div class="record-row"><span class="record-key">status</span><span class="record-val">open to relocate</span></div>
+            <div class="record-row"><span class="record-key">languages</span><span class="record-val">PT native &middot; EN &amp; IT advanced &middot; ES intermediate</span></div>
+            <div class="record-row"><span class="record-key">status</span><span class="record-val">no visa sponsorship needed</span></div>
           </div>
         </div>
       </div>
@@ -454,9 +476,8 @@
           <h3>Programming &amp; Data</h3>
           <ul>
             <li>Python (Pandas, NumPy, Scikit-learn, XGBoost)</li>
-            <li>SQL (PostgreSQL — views, CTEs, window functions)</li>
-            <li>SQL Server &amp; Google BigQuery</li>
-            <li>Scala</li>
+            <li>SQL (PostgreSQL, MySQL, SQL Server)</li>
+            <li>Google BigQuery &amp; cloud analytics (AWS, Azure, GCP)</li>
             <li>ETL &amp; data pipeline design</li>
           </ul>
         </div>
@@ -466,7 +487,7 @@
             <li>Power BI (DAX, Power Query, star-schema modeling)</li>
             <li>Tableau</li>
             <li>Matplotlib / Seaborn</li>
-            <li>Excel (Advanced / VBA)</li>
+            <li>Advanced Excel &middot; KPI &amp; management reporting</li>
           </ul>
         </div>
         <div class="skill-card">
@@ -481,8 +502,9 @@
         <div class="skill-card">
           <h3>Domain Expertise</h3>
           <ul>
+            <li>Quality &amp; operational analytics (automotive)</li>
             <li>Financial risk &amp; FP&amp;A</li>
-            <li>Supply chain analytics</li>
+            <li>Supply chain &amp; logistics analytics</li>
             <li>Customer retention &amp; CRM</li>
             <li>Sports market valuation</li>
           </ul>
@@ -494,7 +516,7 @@
             <li>Jupyter Notebooks</li>
             <li>Streamlit (app deployment)</li>
             <li>Agile / Scrum (SFPC™ certified)</li>
-            <li>Salesforce CRM · Cloud fundamentals (AWS, Azure, GCP)</li>
+            <li>CRISP-DM &middot; Root cause analysis &middot; Data quality</li>
           </ul>
         </div>
       </div>
@@ -507,14 +529,14 @@
       <div class="section-head reveal">
         <span class="eyebrow">03 · Projects</span>
         <h2>Selected work</h2>
-        <p>Five end-to-end projects — each one takes a messy dataset to a decision someone actually made.</p>
+        <p>Five end-to-end projects &mdash; from Python and XGBoost models to Power BI dashboards &mdash; each taking a messy dataset to a decision someone actually made.</p>
       </div>
       <div class="projects-grid reveal">
 
         <a class="project-card" href="projects/football-valuation.html">
-          <span class="project-metric">XGBOOST · LIVE APP</span>
+          <span class="project-metric">XGBOOST &middot; STREAMLIT &middot; 120/120</span>
           <h3>Football Transfer Valuation Model</h3>
-          <p>Built an XGBoost regression model on Transfermarkt performance data to estimate a player's fair market value, then shipped it as an interactive Streamlit app so sports directors can price transfers on data instead of hype.</p>
+          <p>Built an XGBoost regression model on Transfermarkt performance data to estimate a player's fair market value, then shipped it as an interactive Streamlit app so sports directors can price transfers on data instead of hype. Scored the maximum 120/120 on the project assessment.</p>
           <span class="project-cta">Explore the full project →</span>
         </a>
 
@@ -540,9 +562,9 @@
         </a>
 
         <a class="project-card" href="projects/ecommerce-churn.html">
-          <span class="project-metric">RFM · 4 EU CLUSTERS</span>
+          <span class="project-metric">60,000+ ORDERS &middot; 4 EU CLUSTERS</span>
           <h3>Predictive Churn Dashboard for Fashion E-Commerce</h3>
-          <p>Master's capstone with Ora Fashion: while a teammate built the churn model in Python, I architected the Power BI command center — RFM segmentation, cohort analysis, and tailored retention plays mapped across four European customer clusters.</p>
+          <p>Master's capstone with Ora Fashion: while a teammate built the churn model in Python, I architected the Power BI command center — RFM segmentation, cohort analysis, and tailored retention plays mapped across four European customer clusters. Led the analytics workstream of a five-member team; assessed above 90%.</p>
           <span class="project-cta">Explore the full project →</span>
         </a>
       </div>
@@ -561,31 +583,31 @@
           <span class="t-when">JUL 2025 — DEC 2025</span>
           <h3>Data Quality Analyst (Contract) · Coveract SRL</h3>
           <div class="t-where">Turin, Italy</div>
-          <p>Inspected 2,000–3,000 BMW X5/X7 prototype door-handle components a month; identified a recurring assembly defect that cut component scrap by ~15%. Took part in 3 quality audits, including two run directly by BMW.</p>
+          <p>Inspected ~120 BMW X5/X7 prototype door-handle components a day (2,000&ndash;3,000 a month), tracking defect rate, pass/fail and rework KPIs in Excel-based controls. Analysed a ~20% average defect rate, traced it to restrictive design tolerances and a recurring assembly defect, and supported corrective actions that cut scrap by ~15%. Took part in 3 quality audits (two by BMW, one by MinebeaMitsumi Global).</p>
         </div>
         <div class="timeline-item">
           <span class="t-when">JAN 2024 — JUN 2025</span>
           <h3>Career Break — Personal Goal Pursuit</h3>
           <div class="t-where">Turin, Italy</div>
-          <p>Relocated to Italy and completed the Portuguese/EU citizenship process while pursuing the Master's in Data Science full-time.</p>
+          <p>Moved to Italy while the Portuguese/EU citizenship process was completed, and used the time to earn an MSc in Data Science (Rome Business School, Oct 2023 &ndash; Oct 2024) to move into data and technology roles.</p>
         </div>
         <div class="timeline-item">
           <span class="t-when">AUG 2023 — JAN 2024</span>
           <h3>Data Reporting Analyst (Contract) · Micla Engineering and Design</h3>
           <div class="t-where">Turin, Italy</div>
-          <p>Coordinated durability testing for the Lamborghini Revuelto programme — tracking 20–30 tests per cycle across sensors, systems and battery performance, reporting to Lamborghini and Italdesign engineering teams.</p>
+          <p>Coordinated 2&ndash;3 durability test cycles a week for the Lamborghini Revuelto programme and analysed 20&ndash;30 tests for failure conditions and reproducibility. Spotted recurring proximity-sensor failure patterns, kept daily defect and corrective-action reports, and reported to about six stakeholders at Lamborghini and Italdesign.</p>
         </div>
         <div class="timeline-item">
           <span class="t-when">JAN 2022 — AUG 2023</span>
           <h3>Project Support Coordinator · Zenatur</h3>
           <div class="t-where">São Bernardo do Campo, Brazil</div>
-          <p>Coordinated 56–72 Samsung deliveries a month nationwide — including the Galaxy Z Fold, Z Flip and S23 launches — maintaining a 100% on-time delivery rate throughout.</p>
+          <p>Coordinated 56&ndash;72 Samsung deliveries a month across Brazil, including the Galaxy Z Fold, Z Flip and S23 launches and Brasil Game Show, with a 100% on-time delivery rate. Tracked logistics KPIs, optimised Samsung dashboard reporting and maintained the Excel data feeding Power BI.</p>
         </div>
         <div class="timeline-item">
           <span class="t-when">AUG 2019 — AUG 2021</span>
           <h3>Service Delivery Coordinator · T-Systems do Brasil</h3>
           <div class="t-where">São Bernardo do Campo, Brazil</div>
-          <p>Coordinated global IT service-delivery operations between Service Delivery Managers and technical teams, standardizing incident reporting across international clusters.</p>
+          <p>Supported global IT service delivery between Service Delivery Managers and technical teams, standardising incident reporting and tracking to reduce information silos across international clusters.</p>
         </div>
         <div class="timeline-item">
           <span class="t-when">JUL 2016 — OCT 2018</span>
@@ -643,7 +665,7 @@
   });
 
   // Terminal-style role cycling text in the hero
-  const roles = ['Data Analyst_', 'Business Analyst_', 'BI Developer_'];
+  const roles = ['Data Analyst_', 'Data Analytics_', 'Business Intelligence_'];
   const roleLine = document.getElementById('roleLine');
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
