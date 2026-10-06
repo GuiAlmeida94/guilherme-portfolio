@@ -117,7 +117,7 @@
   }
   .nav-logo{
     font-family:var(--font-mono); font-size:14px; color:var(--text);
-    display:flex; align-items:center; gap:8px;
+    display:flex; align-items:center; gap:8px; text-decoration:none;
   }
   .nav-logo .dot{width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block;}
   .nav-links{display:flex; gap:28px; list-style:none; font-family:var(--font-mono); font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;}
@@ -378,7 +378,7 @@
 
 <header class="site-nav">
   <div class="nav-inner">
-    <div class="nav-logo"><span class="dot"></span>Guilherme.Oyakawa</div>
+    <a class="nav-logo" href="/" aria-label="Guilherme Oyakawa - home"><span class="dot"></span>Guilherme.Oyakawa</a>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">MENU</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
@@ -547,14 +547,6 @@
           <p>Master's capstone with Ora Fashion: while a teammate built the churn model in Python, I architected the Power BI command center — RFM segmentation, cohort analysis, and tailored retention plays mapped across four European customer clusters.</p>
           <span class="project-cta">Explore the full project →</span>
         </a>
-
-        <a class="project-card" href="projects/geovex.html">
-          <span class="project-metric">EXPLAINABLE AI · IN PROGRESS</span>
-          <h3>Geopolitical Events &amp; Commodity Trends Analytics</h3>
-          <p>Building an explainable news-analytics pipeline with an Imperial College London collaborator — mapping which countries and companies actually drive gold, oil and metals prices, aimed at investors who can't manually track hundreds of sources.</p>
-          <span class="project-cta">Explore the full project →</span>
-        </a>
-
       </div>
     </div>
   </section>
@@ -628,7 +620,6 @@
           <a class="btn btn-ghost" href="https://github.com/GuiAlmeida94" target="_blank" rel="noopener">GitHub</a>
           <a class="btn btn-ghost" href="https://medium.com/@guilhermeoyakawalmeida" target="_blank" rel="noopener">Medium</a>
         </div>
-        <p style="margin-top:20px; font-size:13px; color:var(--text-faint);"><a href="files/Guilherme_Oyakawa_CV_Full.pdf" target="_blank" rel="noopener" style="color:var(--text-faint); border-bottom:1px solid var(--border);">Prefer more detail? Download the full CV →</a></p>
       </div>
     </div>
   </section>
