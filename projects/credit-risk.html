@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Predicting Credit Default — Guilherme Oyakawa</title>
-<meta name="description" content="A leakage-free XGBoost credit-default model with calibrated probabilities and SHAP explanations: 86% of defaulters caught and 81% lower simulated loss.">
+<meta name="description" content="A leakage-free XGBoost credit-default model with calibrated probabilities and SHAP explanations: recall from 61% to 80.5% at the same cutoff (86% at a recall-first cutoff) and a simulated 81% lower loss.">
 <link rel="canonical" href="https://www.guilhermeoyakawa.com.br/projects/credit-risk.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Predicting Credit Default — Guilherme Oyakawa">
-<meta property="og:description" content="A leakage-free XGBoost credit-default model: 86% of defaulters caught and 81% lower simulated loss, with an interactive Power BI dashboard.">
+<meta property="og:description" content="A leakage-free XGBoost credit-default model: recall from 61% to 80.5% at the same cutoff (86% at a recall-first cutoff) and a simulated 81% lower loss, with an interactive Power BI dashboard.">
 <meta property="og:url" content="https://www.guilhermeoyakawa.com.br/projects/credit-risk.html">
 <meta property="og:image" content="https://www.guilhermeoyakawa.com.br/img/og_credit_risk.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Predicting Credit Default — Guilherme Oyakawa">
-<meta name="twitter:description" content="86% of defaulters caught, 81% lower simulated loss. XGBoost, SHAP and Power BI.">
+<meta name="twitter:description" content="Recall 61% to 80.5% at the same cutoff (86% recall-first), 81% lower simulated loss. XGBoost, SHAP and Power BI.">
 <meta name="twitter:image" content="https://www.guilhermeoyakawa.com.br/img/og_credit_risk.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -398,11 +398,11 @@
       <a class="back-link reveal" href="../index.html#projects">&larr; Back to projects</a>
       <span class="eyebrow reveal">FINANCE &middot; MACHINE LEARNING &middot; XGBOOST &middot; SHAP</span>
       <h1 class="reveal">Predicting Credit Default</h1>
-      <p class="tagline reveal">A leakage-free machine-learning pipeline that estimates every applicant's probability of default and turns it into approve / review / reject decisions &mdash; catching 86% of defaulters and cutting simulated losses by 81%.</p>
+      <p class="tagline reveal">A leakage-free machine-learning pipeline that estimates every applicant's probability of default and turns it into approve / review / reject decisions &mdash; lifting recall from 61% to 80.5% at the same cutoff (86% at a recall-first cutoff) and cutting simulated losses by 81% on this dataset.</p>
       <div class="stat-pills reveal">
         <span class="stat-pill">32,409 loans analysed</span>
-        <span class="stat-pill">ROC-AUC 0.950</span>
-        <span class="stat-pill">86% of defaulters caught</span>
+        <span class="stat-pill">ROC-AUC 0.95 (dataset ceiling)</span>
+        <span class="stat-pill">Recall 61% &rarr; 80.5% at the same cutoff</span>
         <span class="stat-pill">81% lower simulated loss</span>
       </div>
       <div class="detail-cta-row reveal">
@@ -488,11 +488,12 @@
       <span class="eyebrow reveal">Key Findings</span>
       <h2 class="reveal">What the model and the data showed</h2>
       <ul class="findings-list reveal">
-        <li><strong>86% of defaulters caught.</strong> The tuned XGBoost recalls 86.1% of defaulters (95% CI 84.7% to 87.6%) at 66.8% precision. For comparison, the original k-NN caught 61.1% at the default 0.5 cutoff.</li>
-        <li><strong>81% lower simulated loss.</strong> Using the model as a credit filter cuts the simulated loss from USD 13.97M to USD 2.67M versus approving every loan (95% CI 79.1% to 82.6%). The naive "reject grades D to G" rule saves 37.3%. Across a range of cost assumptions the saving stays between 75.5% and 84.3%.</li>
-        <li><strong>Risk bands separate clients cleanly.</strong> Observed default rates are 2.1% for Low risk (17,364 clients), 11.4% for Medium (7,302) and 76.1% for High (7,743). The High band holds about 82% of the expected loss.</li>
+        <li><strong>The model catches 80.5% of defaulters where k-NN catches 61.1%.</strong> Both are measured at the same default 0.5 cutoff, and precision is unchanged (83.1% vs 82.6%): that is the gain of the model. Lowering the cutoff to the tuned 0.35 raises recall further to 86.1% (95% CI 84.7% to 87.6%), but precision falls to 66.8%: that is the gain of the cutoff, and it is a trade-off, not a free improvement.</li>
+        <li><strong>81% lower simulated loss.</strong> Using the model as a credit filter cuts the simulated loss from USD 13.97M to USD 2.67M versus approving every loan (95% CI 79.1% to 82.6%). The naive "reject grades D to G" rule saves 37.3%. Across a range of cost assumptions the saving stays between 75.5% and 84.3%. Like the ROC-AUC, it is an upper bound for this dataset (see below).</li>
+        <li><strong>Risk bands separate clients cleanly.</strong> On the whole portfolio (out-of-fold scores) the observed default rates are 2.1% for Low risk (17,364 clients), 11.4% for Medium (7,302) and 76.1% for High (7,743), and the High band holds about 82% of the expected loss. On the held-out test set, the model fitted on the training data gives 2.8%, 11.4% and 68.1% for the three bands, so new clients should be expected to look like the second set.</li>
         <li><strong>Loan size relative to income is the sharpest signal.</strong> Loans above 30% of income default 70.4% of the time, against 11.6% below 10%. A prior default on file lifts the rate from 18.4% to 37.9%.</li>
         <li><strong>The model is more than the lender's own score.</strong> Without loan grade and interest rate, ROC-AUC falls from 0.950 to 0.904 &mdash; part of the signal is earlier pricing, but a substantial independent signal remains. Removing age costs almost nothing (0.948).</li>
+        <li><strong>The labels look rule-generated, so the headline figures are a ceiling.</strong> All 2,339 renters whose loan is at least 31% of their income defaulted, with no exception: 7% of the clients and 33% of all defaults. A decision tree with just two levels already reaches a ROC-AUC of about 0.80, and without that group the out-of-fold ROC-AUC falls from 0.951 to 0.926. Real portfolios rarely contain rules this clean, so 0.95 and the 81% saving are an upper bound for this dataset, not an expectation for real data.</li>
       </ul>
       <figure class="chart-figure reveal">
         <img src="img/credit_risk_shap_beeswarm.png" alt="SHAP beeswarm plot showing how each feature pushes the XGBoost default prediction up or down" loading="lazy">
@@ -510,7 +511,8 @@
       <div class="delta-box reveal">
         <div class="delta-title">Defaulters caught (recall)</div>
         <div class="delta-row"><span class="delta-label">v1 &middot; k-NN</span><div class="delta-track"><div class="delta-bar v1" style="width:61%"></div></div><span class="delta-val">61%</span></div>
-        <div class="delta-row"><span class="delta-label">v2 &middot; XGBoost (tuned)</span><div class="delta-track"><div class="delta-bar v2" style="width:86.1%"></div></div><span class="delta-val">86.1%</span></div>
+        <div class="delta-row"><span class="delta-label">v2 &middot; same 0.5 cutoff</span><div class="delta-track"><div class="delta-bar v2" style="width:80.5%"></div></div><span class="delta-val">80.5%</span></div>
+        <div class="delta-row"><span class="delta-label">v2 &middot; recall-first cutoff</span><div class="delta-track"><div class="delta-bar v2" style="width:86.1%"></div></div><span class="delta-val">86.1%</span></div>
       </div>
 
       <div class="table-wrap reveal">
@@ -522,10 +524,11 @@
             <tr><td>Preprocessing</td><td>Imputation and encoding on the full dataset before the split</td><td>Leakage-free pipelines, fitted on training data only</td></tr>
             <tr><td>Evaluation</td><td>One train/test split</td><td>Stratified 5-fold cross-validation, tuned threshold, bootstrap confidence intervals</td></tr>
             <tr><td>Best model</td><td>k-NN (k=5)</td><td>XGBoost (tuned)</td></tr>
-            <tr class="best"><td>Defaulters caught (recall)</td><td>61%</td><td>86.1% (95% CI 84.7%&ndash;87.6%)</td></tr>
-            <tr><td>Precision on defaulters</td><td>85%</td><td>66.8% (the price of catching many more defaulters)</td></tr>
-            <tr><td>Overall accuracy</td><td>89%</td><td>87.6% at the recall-first threshold</td></tr>
-            <tr class="best"><td>ROC-AUC</td><td>Not measured</td><td>0.950</td></tr>
+            <tr class="best"><td>Defaulters caught (recall) at the default 0.5 cutoff</td><td>61%</td><td>80.5%</td></tr>
+            <tr><td>Precision on defaulters at the default 0.5 cutoff</td><td>85%</td><td>83.1%</td></tr>
+            <tr><td>Overall accuracy at the default 0.5 cutoff</td><td>89%</td><td>92.2%</td></tr>
+            <tr><td>Recall at a recall-first cutoff (0.35)</td><td>Not tuned</td><td>86.1% (95% CI 84.7%&ndash;87.6%), with 66.8% precision</td></tr>
+            <tr class="best"><td>ROC-AUC</td><td>Not measured</td><td>0.950 (an upper bound for this dataset)</td></tr>
             <tr><td>Probability calibration</td><td>No</td><td>Isotonic (Brier score 0.064 &rarr; 0.052)</td></tr>
             <tr><td>Explainability</td><td>None</td><td>SHAP values</td></tr>
             <tr class="best"><td>Business value</td><td>Not quantified</td><td>81% lower simulated loss (USD 13.97M &rarr; 2.67M)</td></tr>
@@ -533,7 +536,7 @@
           </tbody>
         </table>
       </div>
-      <p class="dashboard-caption reveal">Fair comparison: the same k-NN rebuilt in v2 at the same 0.5 cutoff catches 61.1% of defaulters with 82.6% precision and 88.7% accuracy &mdash; essentially the v1 result. The improvement comes from the leakage-free methodology, a stronger model (XGBoost) and a threshold chosen for the business goal, not from a different dataset. The precision drop is a deliberate trade-off: the lender prefers reviewing more clients over missing defaulters.</p>
+      <p class="dashboard-caption reveal">Fair comparison: the same k-NN rebuilt in v2 at the same 0.5 cutoff catches 61.1% of defaulters with 82.6% precision and 88.7% accuracy &mdash; essentially the v1 result. So the leakage-free methodology makes the estimate honest but does not by itself raise recall. The improvement has two separate sources: the model (at the same cutoff, recall goes from 61.1% to 80.5% with the same precision) and the cutoff (lowering it to 0.35 takes recall from 80.5% to 86.1%, while precision falls from 83.1% to 66.8%). The second is a deliberate trade-off, not a free gain: any model gains recall this way (k-NN reaches 86.0% at a 0.05 cutoff, with 41.9% precision).</p>
 
       <h3 class="subhead reveal">The Power BI dashboard, before and after</h3>
       <div class="compare-grid reveal">
@@ -598,7 +601,7 @@
       <span class="eyebrow reveal">Impact &amp; Limitations</span>
       <div class="impact-box reveal">
         <p>The result is a path from a single yes/no score to a risk-based lending policy: approve the Low band, review the Medium band, and focus scarce attention on the High band where most of the expected loss sits. The fix is not to stop lending &mdash; it is to price and screen risk with evidence.</p>
-        <p style="margin-top:16px; font-size:14px; color:var(--text-faint);">Caveats: cost figures are illustrative US-dollar assumptions (the notebook includes a sensitivity analysis); the data is a snapshot with no time dimension and outcomes only for approved loans; and variables such as age may be restricted in real credit decisions, so a compliance review would be required before any real use.</p>
+        <p style="margin-top:16px; font-size:14px; color:var(--text-faint);">Caveats: the ROC-AUC of 0.95 and the 81% saving are an upper bound for this dataset, whose labels look rule-generated (see the key findings); cost figures are illustrative US-dollar assumptions (the notebook includes a sensitivity analysis); the data is a snapshot with no time dimension and outcomes only for approved loans; and variables such as age may be restricted in real credit decisions, so a compliance review would be required before any real use.</p>
       </div>
     </div>
   </section>
