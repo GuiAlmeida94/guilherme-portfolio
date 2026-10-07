@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Decoding an E-Commerce Delivery Crisis — Guilherme Oyakawa</title>
-<meta name="description" content="Five ML models hit the same accuracy ceiling — and that ceiling turned out to be the real diagnosis behind a logistics operation's chronic delays.">
+<meta name="description" content="Five ML models stalled at about 67% accuracy because delays follow two hard rules: a discount above 10% or a weight of 2.5&ndash;3.5 kg means a late shipment every time, and the rest is close to a coin flip.">
 <link rel="canonical" href="https://www.guilhermeoyakawa.com.br/projects/supply-chain.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -390,7 +390,7 @@
       <div class="dashboard-embed reveal" style="aspect-ratio: 1200 / 600;">
         <iframe title="Ecommerce_Analysis" src="https://app.powerbi.com/view?r=eyJrIjoiYTkwNjc0MGYtMGU5Yy00MWRmLTliOGYtMTE3Yjg3NDMzMzJjIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" frameborder="0" allowfullscreen loading="lazy"></iframe>
       </div>
-      <p class="dashboard-caption reveal">Having trouble viewing it? <a href="https://app.powerbi.com/view?r=eyJrIjoiYTkwNjc0MGYtMGU5Yy00MWRmLTliOGYtMTE3Yjg3NDMzMzJjIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the dashboard directly</a>.</p>
+      <p class="dashboard-caption reveal">The original dashboard shows delay rates of 58&ndash;60% across every shipping mode and warehouse block: the lack of a standout bar is part of the finding. Having trouble viewing it? <a href="https://app.powerbi.com/view?r=eyJrIjoiYTkwNjc0MGYtMGU5Yy00MWRmLTliOGYtMTE3Yjg3NDMzMzJjIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the dashboard directly</a>.</p>
     </div>
   </section>
 
@@ -409,11 +409,11 @@
         </div>
         <div class="process-step">
           <h3>Hitting a hard ceiling</h3>
-          <p>Every model, from the simplest to the most sophisticated, plateaued around 63–67% accuracy. Testing five genuinely different mathematical approaches and landing on the same wall is itself a signal: the delays weren't following a learnable pattern from the available variables — the operation was in a state of chronic, structural chaos, not a chaos a smarter algorithm could untangle.</p>
+          <p>Every model, from the simplest to the most sophisticated, plateaued around 63&ndash;67% accuracy. A decision tree with just two splits (discount and weight) lands in the same range, which explains the wall: delays follow two hard rules plus a lot of noise, so adding model complexity adds nothing. Landing on the same ceiling with five different approaches was the signal to stop tuning and start diagnosing.</p>
         </div>
         <div class="process-step">
           <h3>Mapping the chaos in Power BI</h3>
-          <p>If the machine can't predict the disorder with confidence, the next move is to map where it's concentrated so the business can act directly on the source.</p>
+          <p>With prediction capped, the next move is to map where delays concentrate and to test which factors really matter. Shipping mode, warehouse block, gender and customer rating show no meaningful difference (all within about 58&ndash;60%), so the dashboard doubles as evidence of where <em>not</em> to look.</p>
         </div>
       </div>
     </div>
@@ -424,9 +424,10 @@
       <span class="eyebrow reveal">Key Findings</span>
       <h2 class="reveal">The VIP Paradox</h2>
       <ul class="findings-list reveal">
-        <li><strong>"High importance" shipments were the most delayed.</strong> Nearly 65% late — the deliveries that should get the most care were getting the least reliable treatment.</li>
-        <li><strong>Air freight had the worst delay rate of any shipping mode</strong> — over 60%, despite being the premium, express-cost option.</li>
-        <li><strong>Warehouse Block B was the single biggest bottleneck,</strong> with a delay rate above 60%, closely followed by two other blocks — pointing to a breakdown in internal workflow management at specific hubs.</li>
+        <li><strong>"High importance" shipments were the most delayed.</strong> 65% late against 59% for the rest (statistically significant) &mdash; the deliveries that should get the most care were getting the least reliable treatment.</li>
+        <li><strong>A discount above 10% meant a late shipment, every time.</strong> All 2,647 shipments with a discount above 10% arrived late, and a weight between 2.5 and 3.5 kg behaved the same way (874 shipments). Together these two rules cover 2,776 shipments, 25% of the total, and account for 42% of all delays.</li>
+        <li><strong>Outside those rules, delays are close to a coin flip.</strong> The remaining 8,223 shipments are late about 46% of the time, with no variable in the data separating them well &mdash; which is why no model went past roughly 67% accuracy.</li>
+        <li><strong>Shipping mode and warehouse made no real difference.</strong> Flight 60.2%, ship 59.8%, road 58.8%; the five warehouse blocks range from 58.6% to 60.2%. These gaps are within chance (chi-square p = 0.69 for mode, 0.90 for warehouse), so the data does not point to air-freight carriers or to any single warehouse.</li>
       </ul>
     </div>
   </section>
@@ -435,7 +436,8 @@
     <div class="wrap">
       <span class="eyebrow reveal">Impact</span>
       <div class="impact-box reveal">
-        <p>True analysis doesn't stop at <code>model.fit()</code> — it stops when the business makes a decision. Here, that meant redirecting the company's strategy away from deploying a predictive algorithm and toward an emergency warehouse audit and renegotiated SLAs with air-freight carriers. A 67% accuracy ceiling didn't fail to predict the future; it successfully diagnosed a broken present.</p>
+        <p>True analysis doesn't stop at <code>model.fit()</code> &mdash; it stops when the business makes a decision. Here, that meant redirecting effort away from a predictive algorithm and toward two concrete questions: why does every order discounted above 10% ship late (for example, are promotional orders routed through a slower fulfilment path?), and what happens to parcels between 2.5 and 3.5 kg? A 67% ceiling didn't fail to predict the future; it showed that the delays come from a process rule, not from the shipping mode or the warehouse.</p>
+        <p style="margin-top:14px; font-size:13.5px; color:var(--text-faint);">Caveat: this is a public Kaggle dataset. Thresholds as exact as &ldquo;100% late above a discount&rdquo; are unusual in real operations, so the finding should be read as a property of this dataset and checked against real process data before acting on it.</p>
       </div>
     </div>
   </section>
