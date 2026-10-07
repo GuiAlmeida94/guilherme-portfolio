@@ -348,6 +348,24 @@
 .results-table th{color:var(--text-faint); font-weight:500; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;}
 .results-table td{color:var(--text-muted);}
 .results-table tr.best td{color:var(--accent); font-weight:600;}
+.subhead{font-size:20px; margin:44px 0 18px;}
+.compare-table th:first-child,.compare-table td:first-child{width:26%; color:var(--text);}
+.compare-table td{vertical-align:top; font-family:var(--font-body); font-size:14.5px; line-height:1.5;}
+.compare-table th:not(:first-child){width:37%;}
+.compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:28px;}
+.compare-grid .chart-figure{margin-top:0;}
+.chart-figure.shot img{padding:0; background:var(--surface);}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr;}}
+.delta-box{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:24px 28px; margin:28px 0;}
+.delta-title{font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px;}
+.delta-row{display:grid; grid-template-columns:190px 1fr 64px; align-items:center; gap:14px; margin-top:12px;}
+.delta-label{font-size:14px; color:var(--text-muted);}
+.delta-track{background:var(--border); border-radius:6px; height:16px; overflow:hidden;}
+.delta-bar{height:100%; border-radius:6px;}
+.delta-bar.v1{background:var(--text-faint);}
+.delta-bar.v2{background:var(--accent);}
+.delta-val{font-family:var(--font-mono); font-size:15px; color:var(--text); text-align:right;}
+@media (max-width:560px){.delta-row{grid-template-columns:1fr 64px;} .delta-label{grid-column:1 / -1;}}
 </style>
 </head>
 <body>
@@ -469,6 +487,86 @@
         <img src="img/credit_risk_shap_beeswarm.png" alt="SHAP beeswarm plot showing how each feature pushes the XGBoost default prediction up or down" loading="lazy">
         <figcaption>SHAP beeswarm: each dot is a client. High loan-to-income and high interest rates push risk up; owning a home and high-quality loan grades push it down.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <section class="detail-section" id="evolution">
+    <div class="wrap">
+      <span class="eyebrow reveal">Version History</span>
+      <h2 class="reveal">From v1 to v2: how much did the project improve?</h2>
+      <p class="lead reveal">I kept the original version of the project untouched so the progress is measurable. The table compares both versions of the Python work; the original notebook and dashboard stay in the repository and the original dashboard stays online.</p>
+
+      <div class="delta-box reveal">
+        <div class="delta-title">Defaulters caught (recall)</div>
+        <div class="delta-row"><span class="delta-label">v1 &middot; k-NN</span><div class="delta-track"><div class="delta-bar v1" style="width:61%"></div></div><span class="delta-val">61%</span></div>
+        <div class="delta-row"><span class="delta-label">v2 &middot; XGBoost (tuned)</span><div class="delta-track"><div class="delta-bar v2" style="width:86.1%"></div></div><span class="delta-val">86.1%</span></div>
+      </div>
+
+      <div class="table-wrap reveal">
+        <table class="results-table compare-table">
+          <thead><tr><th>Python model</th><th>v1 (original)</th><th>v2 (rebuilt)</th></tr></thead>
+          <tbody>
+            <tr><td>Data after cleaning</td><td>31,679 loans</td><td>32,409 loans</td></tr>
+            <tr><td>Models compared</td><td>k-NN, linear SVM</td><td>k-NN, Logistic Regression, Random Forest, XGBoost (tuned)</td></tr>
+            <tr><td>Preprocessing</td><td>Imputation and encoding on the full dataset before the split</td><td>Leakage-free pipelines, fitted on training data only</td></tr>
+            <tr><td>Evaluation</td><td>One train/test split</td><td>Stratified 5-fold cross-validation, tuned threshold, bootstrap confidence intervals</td></tr>
+            <tr><td>Best model</td><td>k-NN (k=5)</td><td>XGBoost (tuned)</td></tr>
+            <tr class="best"><td>Defaulters caught (recall)</td><td>61%</td><td>86.1% (95% CI 84.7%&ndash;87.6%)</td></tr>
+            <tr><td>Precision on defaulters</td><td>85%</td><td>66.8% (the price of catching many more defaulters)</td></tr>
+            <tr><td>Overall accuracy</td><td>89%</td><td>87.6% at the recall-first threshold</td></tr>
+            <tr class="best"><td>ROC-AUC</td><td>Not measured</td><td>0.950</td></tr>
+            <tr><td>Probability calibration</td><td>No</td><td>Isotonic (Brier score 0.064 &rarr; 0.052)</td></tr>
+            <tr><td>Explainability</td><td>None</td><td>SHAP values</td></tr>
+            <tr class="best"><td>Business value</td><td>Not quantified</td><td>81% lower simulated loss (USD 13.97M &rarr; 2.67M)</td></tr>
+            <tr><td>Robustness checks</td><td>None</td><td>Ablation tests (loan grade, interest rate, age)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="dashboard-caption reveal">Fair comparison: the same k-NN rebuilt in v2 at the same 0.5 cutoff catches 61.1% of defaulters with 82.6% precision and 88.7% accuracy &mdash; essentially the v1 result. The improvement comes from the leakage-free methodology, a stronger model (XGBoost) and a threshold chosen for the business goal, not from a different dataset. The precision drop is a deliberate trade-off: the lender prefers reviewing more clients over missing defaulters.</p>
+
+      <h3 class="subhead reveal">The Power BI dashboard, before and after</h3>
+      <div class="compare-grid reveal">
+        <figure class="chart-figure shot">
+          <img src="img/powerbi_v1_dashboard.jpg" alt="Original v1 Power BI dashboard: default rate by loan grade, home ownership and loan intention" loading="lazy">
+          <figcaption><strong>v1 &middot; Original.</strong> One descriptive page: default rate by loan grade, home ownership and loan purpose, with an age slider. No model output.</figcaption>
+        </figure>
+        <figure class="chart-figure shot">
+          <img src="img/powerbi_v2_overview.png" alt="Rebuilt v2 Power BI dashboard overview page with risk bands, expected loss and key insights" loading="lazy">
+          <figcaption><strong>v2 &middot; Rebuilt.</strong> Three pages driven by the XGBoost scores: risk bands, expected loss, dynamic insights and a decision table.</figcaption>
+        </figure>
+      </div>
+
+      <div class="table-wrap reveal">
+        <table class="results-table compare-table">
+          <thead><tr><th>Power BI</th><th>v1 (original)</th><th>v2 (rebuilt)</th></tr></thead>
+          <tbody>
+            <tr><td>Pages</td><td>1</td><td>3 (Portfolio Overview, Where the Risk Is, Model &amp; Decision)</td></tr>
+            <tr><td>Data behind it</td><td>Raw loan data</td><td>Every loan scored by the model: default probability, risk band, expected loss</td></tr>
+            <tr><td>What it answers</td><td>Where did defaults happen?</td><td>Who is likely to default, how much would it cost, and what should the bank do?</td></tr>
+            <tr><td>Interactivity</td><td>Age slider</td><td>Loan grade, purpose and home-ownership filters, page tabs, clear-all button</td></tr>
+            <tr><td>Insights</td><td>Static visuals</td><td>Dynamic text that updates with every filter</td></tr>
+            <tr><td>Model transparency</td><td>None</td><td>Model comparison table and SHAP risk drivers</td></tr>
+            <tr><td>Design</td><td>Default light layout</td><td>Dark theme matching this portfolio, with a semantic colour code for risk</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="compare-grid reveal" style="margin-top:28px;">
+        <figure class="chart-figure shot">
+          <img src="img/powerbi_v2_risk.png" alt="v2 dashboard page Where the Risk Is with default rates by loan-to-income, grade and purpose, and a heatmap" loading="lazy">
+          <figcaption>v2 &middot; Where the Risk Is</figcaption>
+        </figure>
+        <figure class="chart-figure shot">
+          <img src="img/powerbi_v2_model.png" alt="v2 dashboard page Model and Decision with model comparison, decision table and SHAP drivers" loading="lazy">
+          <figcaption>v2 &middot; Model &amp; Decision</figcaption>
+        </figure>
+      </div>
+
+      <div class="detail-cta-row reveal">
+        <a class="btn btn-ghost" href="#dashboard">Open the v2 dashboard</a>
+        <a class="btn btn-ghost" href="https://app.powerbi.com/view?r=eyJrIjoiNzMyY2ZmYWItYWVjMy00ZDdmLWJiMjQtOTg4YjMxMDBiMjkwIiwidCI6ImRlNTM3NmEzLTdhOTEtNGM1NS1hOGQ5LTI0YjhkMTVlNWViMSJ9" target="_blank" rel="noopener">Open the original v1 dashboard</a>
+        <a class="btn btn-ghost" href="https://github.com/GuiAlmeida94/credit-risk-analysis-python" target="_blank" rel="noopener">Both versions on GitHub</a>
+      </div>
     </div>
   </section>
 
